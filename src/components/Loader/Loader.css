@@ -28,7 +28,7 @@
 .loader-text {
   margin-top: clamp(16px, 3vw, 26px);
 
-  color: #A67C52;
+  color: #a67c52;
 
   font-size: clamp(12px, 1.2vw, 15px);
   font-weight: 500;
@@ -42,7 +42,7 @@
 
 @keyframes pulse {
   0% {
-    opacity: .35;
+    opacity: 0.35;
   }
 
   50% {
@@ -50,14 +50,13 @@
   }
 
   100% {
-    opacity: .35;
+    opacity: 0.35;
   }
 }
 
 /* ---------- Tablet ---------- */
 
 @media (max-width: 768px) {
-
   .loader-gif {
     width: min(260px, 72vw);
   }
@@ -73,7 +72,6 @@
 /* ---------- Mobile ---------- */
 
 @media (max-width: 480px) {
-
   .loader-screen {
     padding: 16px;
   }
@@ -94,7 +92,6 @@
 /* ---------- Large Desktop ---------- */
 
 @media (min-width: 1440px) {
-
   .loader-gif {
     width: 360px;
   }

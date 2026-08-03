@@ -13,145 +13,134 @@ export default function Hero() {
   const heroRef = useRef(null);
 
   useLayoutEffect(() => {
-    const canvas = canvasRef.current;
-    const context = canvas.getContext("2d");
-    context.imageSmoothingEnabled = true;
-    context.imageSmoothingQuality = "high";
+  const canvas = canvasRef.current;
+  const context = canvas.getContext("2d");
+  context.imageSmoothingEnabled = true;
+  context.imageSmoothingQuality = "high";
 
-    let cancelled = false;
-    const images = [];
-    const frame = { current: 0 };
+  let cancelled = false;
+  const images = [];
+  const frame = { current: 0 };
 
-    let heroTween;
-    let scrollTriggerSet = false;
+  let heroTween;
+  let scrollTriggerSet = false;
 
-    const isMobile = window.innerWidth <= 768;
+  const isMobile = window.innerWidth <= 768;
 
-    // Resize canvas
-    function resizeCanvas() {
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  // Lock viewport height once — ignore live toolbar show/hide changes
+  let lastWidth = window.innerWidth;
+  const setVh = () => {
+    document.documentElement.style.setProperty("--vh", `${window.innerHeight * 0.01}px`);
+  };
+  setVh();
 
-      const width = canvas.clientWidth;
-      const height = canvas.clientHeight;
+  function resizeCanvas() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
 
-      canvas.width = width * dpr;
-      canvas.height = height * dpr;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
 
-      context.setTransform(1, 0, 0, 1, 0, 0);
-      context.scale(dpr, dpr);
+    context.setTransform(1, 0, 0, 1, 0, 0);
+    context.scale(dpr, dpr);
 
-      render();
+    render();
+    ScrollTrigger.refresh();
+  }
 
-      ScrollTrigger.refresh();
+  function render() {
+    if (cancelled) return;
+    let img = images[Math.round(frame.current)];
+    if (!img || !img.complete) return;
+    if (!img.naturalWidth) {
+      img = images.findLast((i) => i.complete && i.naturalWidth);
+      if (!img) return;
     }
 
-    // Draw image (cover)
-    function render() {
+    const canvasWidth = canvas.clientWidth;
+    const canvasHeight = canvas.clientHeight;
+    context.clearRect(0, 0, canvasWidth, canvasHeight);
+
+    const imgRatio = img.naturalWidth / img.naturalHeight;
+    const canvasRatio = canvasWidth / canvasHeight;
+    let drawWidth, drawHeight;
+    if (imgRatio > canvasRatio) {
+      drawHeight = canvasHeight;
+      drawWidth = drawHeight * imgRatio;
+    } else {
+      drawWidth = canvasWidth;
+      drawHeight = drawWidth / imgRatio;
+    }
+    const x = (canvasWidth - drawWidth) / 2;
+    const y = (canvasHeight - drawHeight) / 2;
+    context.drawImage(img, x, y, drawWidth, drawHeight);
+  }
+
+  let loadedCount = 0;
+  let failedCount = 0;
+
+  for (let i = 1; i <= frameCount; i++) {
+    const img = new Image();
+    img.src = `/frames/ezgif-frame-${String(i).padStart(3, "0")}.jpg`;
+
+    img.onload = () => {
       if (cancelled) return;
+      loadedCount++;
+      if (i === 1) resizeCanvas();
 
-      let img = images[Math.round(frame.current)];
+      if (!scrollTriggerSet && loadedCount >= 5) {
+        scrollTriggerSet = true;
+        resizeCanvas();
 
-      if (!img || !img.complete) return;
+        heroTween = gsap.to(frame, {
+          current: frameCount - 1,
+          snap: "current",
+          ease: "none",
+          onUpdate: render,
+          scrollTrigger: {
+            trigger: heroRef.current,
+            start: "top top",
+            end: isMobile ? "+=2500" : "+=5000",
+            scrub: true,
+            pin: true,
+            anticipatePin: 1,
+            invalidateOnRefresh: true,
+          },
+        });
 
-      if (!img.naturalWidth) {
-        img = images.findLast((i) => i.complete && i.naturalWidth);
-        if (!img) return;
+        ScrollTrigger.refresh();
+        window.dispatchEvent(new Event("hero-pin-ready"));
       }
-
-      const canvasWidth = canvas.clientWidth;
-      const canvasHeight = canvas.clientHeight;
-
-      context.clearRect(0, 0, canvasWidth, canvasHeight);
-
-      const imgRatio = img.naturalWidth / img.naturalHeight;
-      const canvasRatio = canvasWidth / canvasHeight;
-
-      let drawWidth;
-      let drawHeight;
-
-      if (imgRatio > canvasRatio) {
-        drawHeight = canvasHeight;
-        drawWidth = drawHeight * imgRatio;
-      } else {
-        drawWidth = canvasWidth;
-        drawHeight = drawWidth / imgRatio;
-      }
-
-      const x = (canvasWidth - drawWidth) / 2;
-      const y = (canvasHeight - drawHeight) / 2;
-
-      context.drawImage(img, x, y, drawWidth, drawHeight);
-    }
-
-    let loadedCount = 0;
-    let failedCount = 0;
-
-    for (let i = 1; i <= frameCount; i++) {
-      const img = new Image();
-
-      img.src = `/frames/ezgif-frame-${String(i).padStart(3, "0")}.jpg`;
-
-      img.onload = () => {
-        if (cancelled) return;
-
-        loadedCount++;
-
-        if (i === 1) {
-          resizeCanvas();
-        }
-
-        if (!scrollTriggerSet && loadedCount >= 5) {
-          scrollTriggerSet = true;
-
-          resizeCanvas();
-
-          heroTween = gsap.to(frame, {
-            current: frameCount - 1,
-            snap: "current",
-            ease: "none",
-            onUpdate: render,
-
-            scrollTrigger: {
-              trigger: heroRef.current,
-              start: "top top",
-
-              // Smaller scroll distance on mobile
-              end: isMobile ? "+=2500" : "+=5000",
-
-              scrub: true,
-              pin: true,
-              anticipatePin: 1,
-              invalidateOnRefresh: true,
-            },
-          });
-
-          ScrollTrigger.refresh();
-
-          window.dispatchEvent(new Event("hero-pin-ready"));
-        }
-      };
-
-      img.onerror = () => {
-        if (cancelled) return;
-
-        failedCount++;
-        console.warn("Frame failed:", img.src);
-      };
-
-      images.push(img);
-    }
-
-    window.addEventListener("resize", resizeCanvas);
-
-    return () => {
-      cancelled = true;
-
-      window.removeEventListener("resize", resizeCanvas);
-
-      heroTween?.scrollTrigger?.kill();
-      heroTween?.kill();
     };
-  }, []);
+
+    img.onerror = () => {
+      if (cancelled) return;
+      failedCount++;
+      console.warn("Frame failed:", img.src);
+    };
+
+    images.push(img);
+  }
+
+  // Only react to real resizes (orientation change, actual window resize) —
+  // ignore mobile toolbar show/hide, which changes height but not width.
+  const handleResize = () => {
+    if (window.innerWidth === lastWidth) return; // width unchanged = toolbar noise, skip
+    lastWidth = window.innerWidth;
+    setVh();
+    resizeCanvas();
+  };
+
+  window.addEventListener("resize", handleResize);
+
+  return () => {
+    cancelled = true;
+    window.removeEventListener("resize", handleResize);
+    heroTween?.scrollTrigger?.kill();
+    heroTween?.kill();
+  };
+}, []);
 
   return (
     <section ref={heroRef} className="hero">
