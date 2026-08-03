@@ -1,0 +1,212 @@
+.signature-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  padding-right: 2rem;
+  padding-top: 5rem;
+  padding-bottom: 5rem;
+}
+
+.signature-intro {
+  width: 100%;
+  margin-bottom: 14px;
+}
+
+.signature-tag {
+  letter-spacing: 5px;
+  font-size: 12px;
+  color: #a67c52;
+}
+
+.signature-title {
+  margin-top: 14px;
+  font-size: clamp(2.2rem, 6vw, 56px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+}
+
+.signature-break {
+  margin: 20px 0;
+  width: 44px;
+  height: 2px;
+  background: #a67c52;
+}
+
+.signature-description {
+  max-width: 340px;
+  color: #b7b7b7;
+  line-height: 1.8;
+  font-size: 15px;
+}
+
+.signature-card {
+  position: relative;
+  width: 100%;
+  height: 240px;
+  overflow: hidden;
+  border-radius: 20px;
+  flex: none;
+}
+
+.signature-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: 0.7s;
+}
+
+.signature-card:hover img {
+  transform: scale(1.08);
+}
+
+.title-card {
+  padding: 0 0 10px 15px;
+}
+
+/* ========================= */
+/* Desktop */
+/* ========================= */
+
+@media (min-width: 1024px) {
+  .signature-wrapper {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    height: 100vh;
+    gap: 32px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  .signature-intro {
+    min-width: 30vw;
+    max-width: 360px;
+    margin-bottom: 0;
+  }
+
+  .signature-card {
+    width: 800px;
+    height: 62vh;
+  }
+}
+
+/* ========================= */
+/* Tablet */
+/* ========================= */
+
+@media (max-width: 1023px) {
+  .signature-wrapper {
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+
+  .signature-intro {
+    text-align: center;
+    margin-inline: auto;
+  }
+
+  .signature-break {
+    margin-inline: auto;
+  }
+
+  .signature-description {
+    margin-inline: auto;
+    max-width: 520px;
+  }
+
+  .signature-card {
+    height: 340px;
+  }
+}
+
+/* ========================= */
+/* Mobile */
+/* ========================= */
+
+@media (max-width: 768px) {
+  .signature-wrapper {
+    gap: 18px;
+    padding-left: 20px !important;
+    padding-right: 20px;
+    padding-top: 3rem;
+    padding-bottom: 3rem;
+  }
+
+  .signature-intro {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 500px;
+    margin: 0 auto 1rem;
+  }
+
+  .signature-tag {
+    text-align: center;
+  }
+
+  .signature-title {
+    font-size: 34px;
+    text-align: center;
+  }
+
+  .signature-description {
+    font-size: 14px;
+    max-width: 100%;
+    text-align: center;
+  }
+
+  .signature-break {
+    margin: 20px auto;
+  }
+
+  .signature-card {
+    height: 250px;
+    border-radius: 18px;
+  }
+
+  .signature-card img {
+    border-radius: 18px;
+  }
+
+  .dish-card .absolute.bottom-0 {
+    padding: 18px;
+  }
+
+  .dish-card h2 {
+    font-size: 20px;
+    text-align: left;
+  }
+}
+
+/* ========================= */
+/* Small Mobile */
+/* ========================= */
+
+@media (max-width: 480px) {
+  .signature-wrapper {
+    padding-left: 16px !important;
+    padding-right: 16px;
+  }
+
+  .signature-intro {
+    max-width: 100%;
+  }
+
+  .signature-title {
+    font-size: 30px;
+  }
+
+  .signature-description {
+    font-size: 13px;
+    text-align: center;
+  }
+
+  .signature-card {
+    height: 210px;
+  }
+
+  .dish-card h2 {
+    font-size: 18px;
+  }
+}

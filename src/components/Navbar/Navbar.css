@@ -1,0 +1,204 @@
+/* Navbar.css */
+
+.navbar {
+  width:min(1200px,94%);
+  margin: 0 auto;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 18px 28px;
+
+  border-radius: 999px;
+
+  background: rgba(15, 15, 15, 0.35);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.desktop-nav{
+    display:flex;
+    align-items:center;
+    gap:34px;
+}
+
+.desktop-nav button{
+    background:none;
+    border:none;
+    color:#f7f2eb;
+    cursor:pointer;
+    font-size:15px;
+    transition:.3s;
+}
+
+.desktop-nav button:hover{
+    color:#A67C52;
+}
+
+.reserve-btn{
+    background:#A67C52;
+    color:#1A1310;
+    border:none;
+    padding:12px 24px;
+    border-radius:999px;
+    font-weight:600;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.reserve-btn:hover{
+    background:#c99845;
+}
+
+.navbar-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  background: #a67c52;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar-icon span {
+  font-family: serif;
+  font-size: 20px;
+  font-weight: 600;
+  color: #1a1310;
+}
+
+/* ── Hamburger ── */
+.hamburger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.hamburger span {
+  display: block;
+  height: 2px;
+  width: 100%;
+  background: #f7f2eb;
+  border-radius: 2px;
+  transition:
+    transform 0.3s ease,
+    opacity 0.3s ease;
+}
+
+.hamburger.open {
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ── Overlay + dropdown ── */
+.nav-overlay {
+  position: fixed;
+  inset: 0;
+
+  background: rgba(8, 8, 8, 0.65);
+
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+
+  opacity: 0;
+  visibility: hidden;
+
+  transition: all 0.35s ease;
+
+  z-index: 98;
+}
+
+.nav-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.nav-menu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: min(420px, 100vw);
+  height: 100vh;
+  padding: 96px 40px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: #1a1310;
+  box-shadow: -8px 0 40px rgba(0, 0, 0, 0.3);
+  transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  z-index: 100;
+}
+
+.nav-menu.open {
+  transform: translateX(0);
+}
+
+.nav-menu button {
+  background: none;
+  border: none;
+  text-align: left;
+  padding: 14px 0;
+  font-size: 15px;
+  color: #f7f2eb;
+  border-bottom: 1px solid rgba(247, 242, 235, 0.12);
+  cursor: pointer;
+  transition: color 0.25s;
+}
+
+.nav-menu button:hover {
+  color: #a67c52;
+}
+
+.close-btn {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 32px;
+  height: 32px;
+  background: none;
+  border: none;
+  color: #f7f2eb;
+  font-size: 1.3rem;
+  cursor: pointer;
+  transition:
+    color 0.25s,
+    transform 0.25s;
+}
+
+.close-btn:hover {
+  color: #a67c52;
+  transform: rotate(90deg);
+}
+
+.hamburger{
+    display:none;
+}
+
+@media (max-width:768px){
+
+.navbar{
+    width:100%;
+    padding:16px 20px;
+}
+
+.desktop-nav,
+.reserve-btn{
+    display:none;
+}
+
+.hamburger{
+    display:flex;
+}
+
+}
